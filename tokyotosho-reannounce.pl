@@ -25,14 +25,14 @@ sub event_privmsg {
         my ($tid, $category, $catnum, $release, $url, $size, $comment) = @tokens[1..7];
         foreach my $exp (@exps) {
             if ($release =~ m/$exp/i) {
-                $server->command("MSG BotServ say $announcechan ".chr(2).chr(3)."10Release: ".chr(3)."11[$category]".chr(2)." ".chr(3)."3$release");
-                $server->command("MSG BotServ say $announcechan ".chr(2).chr(3)."12Torrent: ".chr(2)." $url");
+                my $pre = "MSG BotServ say $announcechan ";
+                $server->command($pre.chr(2).chr(3)."10Release: ".chr(3)."11[$category]".chr(2)." ".chr(3)."3$release");
+                $server->command($pre.chr(2).chr(3)."12Torrent: ".chr(2)." $url");
+                my $cmd = $pre.chr(3)."10Size: $size";
                 if ($comment) {
-                    $server->command("MSG BotServ say $announcechan ".chr(3)."10Size: $size | Comment: $comment");
+                    $cmd .= " | Comment: $comment";
                 }
-                else {
-                    $server->command("MSG BotServ say $announcechan ".chr(3)."10Size: $size");
-                }
+                $server->command($cmd);
                 last;
             }
         }
